@@ -1,0 +1,210 @@
+/* assets/styles/styles.css */
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #EEF8FF;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header */
+.header {
+    background-color: #7D53DE;
+    color: white;
+    padding: 2rem 1rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.header p {
+    font-size: 1.1rem;
+}
+
+/* Main Container */
+.container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Stats Section */
+.pet-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.stats-card {
+    background-color: #D1F5FF;
+    padding: 1.5rem;
+    border-radius: 10px;
+    flex: 1 1 200px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.stats-card h3 {
+    font-size: 2rem;
+    color: #34F6F2;
+}
+
+.stats-card p {
+    font-weight: bold;
+    color: #555;
+}
+
+/* Table Section */
+.pet-table-section h2 {
+    margin-bottom: 1rem;
+    color: #7D53DE;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.pet-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.pet-table th, .pet-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #D1F5FF;
+}
+
+.pet-table th {
+    background-color: #78E3FD;
+    color: #333;
+}
+
+.pet-table tr:hover {
+    background-color: #F0FBFF;
+}
+
+.pet-photo img {
+    border-radius: 8px;
+    max-width: 80px;
+    height: auto;
+}
+
+/* Pet Details and Owner Info */
+.pet-details span,
+.owner-info small {
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.owner-info {
+    font-size: 0.95rem;
+}
+
+/* Vaccines */
+.vaccines .vaccine-tag {
+    background-color: #D1F5FF;
+    color: #333;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    margin: 0.2rem 0;
+    display: block;
+    font-size: 0.85rem;
+}
+
+/* Buttons */
+.btn {
+    border: none;
+    padding: 0.5rem 0.8rem;
+    margin-right: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+    color: white;
+}
+
+.view-btn {
+    background-color: #34F6F2;
+}
+
+.view-btn:hover {
+    background-color: #2bd5d2;
+}
+
+.edit-btn {
+    background-color: #7D53DE;
+}
+
+.edit-btn:hover {
+    background-color: #6a47c4;
+}
+
+/* Footer */
+.footer {
+    background-color: #7D53DE;
+    color: white;
+    padding: 2rem 1rem;
+    margin-top: 3rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    flex: 1 1 200px;
+}
+
+.footer-section h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    color: #EEF8FF;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section a {
+    color: #D1F5FF;
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #D1F5FF;
+}

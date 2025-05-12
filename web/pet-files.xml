@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="pet-files-transfer.xsl"?>
+<pet_records>
+    <pet pet_id="M_001">
+        <chip>0x1A2B3C</chip>
+        <pet_name>Nala</pet_name>
+        <birth_date>09/01/2021</birth_date>
+        <pedigree>true</pedigree>
+        <physical_characteristics>
+            <weight>13.5 kg</weight>
+            <sex value="Female"/>
+            <color>Black</color>
+            <photo>assets/img/dog-1.jpg</photo>
+            <fur_type value="Long"/>
+        </physical_characteristics>
+        <owner_details>
+            <owner_name>Jaume</owner_name>
+            <surname>Pérez</surname>
+            <address>Aragó Street, 153</address>
+            <email>jaume.perez@gmail.com</email>
+            <phone>933892965</phone>
+        </owner_details>
+        <vaccinations>
+            <vaccine laboratory="Virbac Laboratory">
+                <vaccine_name>Rabies vaccine</vaccine_name>
+                <administration_date>17/04/2024</administration_date>
+                <next_administration_date />
+            </vaccine>
+            <vaccine laboratory="Zoetis Laboratory">
+                <vaccine_name>Parvovirus vaccine</vaccine_name>
+                <administration_date>20/02/2023</administration_date>
+                <next_administration_date>15/03/2024</next_administration_date>
+            </vaccine>
+        </vaccinations>
+        <visits>
+            <visit>
+                <visit_id>1</visit_id>
+                <visit_date>20/02/2023</visit_date>
+                <reason_for_visit>Parvovirus vaccination</reason_for_visit>
+                <diagnosis>The dog shows no symptoms of parvovirus. Vaccination is recommended to prevent the disease.</diagnosis>
+                <treatment>Canine parvovirus vaccine administered.</treatment>
+                <discharge_status>Resolved</discharge_status>
+            </visit>
+        </visits>
+    </pet>
+    <pet pet_id="M_002">
+        <chip>0x4D5E6F</chip>
+        <pet_name>Luna</pet_name>
+        <birth_date>18/07/2020</birth_date>
+        <pedigree>false</pedigree>
+        <physical_characteristics>
+            <weight>5.9 kg</weight>
+            <sex value="Female"/>
+            <color>Brown</color>
+            <photo>assets/img/dog-2.jpg</photo>
+            <fur_type value="Curly"/>
+        </physical_characteristics>
+        <owner_details>
+            <owner_name>Mireia</owner_name>
+            <surname>García</surname>
+            <address>Sepúlveda Street, 106</address>
+            <email>mireia.garcia@gmail.com</email>
+            <phone>566036826</phone>
+        </owner_details>
+        <vaccinations>
+            <vaccine laboratory="Virbac Laboratory">
+                <vaccine_name>Rabies vaccine</vaccine_name>
+                <administration_date>29/08/2024</administration_date>
+                <next_administration_date>02/09/2025</next_administration_date>
+            </vaccine>
+            <vaccine laboratory="Boehringer Ingelheim Laboratory">
+                <vaccine_name>Canine hepatitis vaccine</vaccine_name>
+                <administration_date>04/06/2023</administration_date>
+                <next_administration_date/>
+            </vaccine>
+        </vaccinations>
+        <visits>
+            <visit>
+                <visit_id>2</visit_id>
+                <visit_date>04/06/2023</visit_date>
+                <reason_for_visit>Detected illness</reason_for_visit>
+                <diagnosis>Canine viral hepatitis</diagnosis>
+                <treatment>Medical support, hydration, medication. Hepatitis vaccine administered.</treatment>
+                <discharge_status>Resolved</discharge_status>
+            </visit>
+        </visits>
+    </pet>
+    <pet pet_id="M_003">
+        <chip>0x7F8E9A</chip>
+        <pet_name>Rocco</pet_name>
+        <birth_date>16/03/2024</birth_date>
+        <pedigree>false</pedigree>
+        <physical_characteristics>
+            <weight>36.8 kg</weight>
+            <sex value="Male"/>
+            <color>Brown</color>
+            <photo>assets/img/dog-3.jpg</photo>
+            <fur_type value="Short"/>
+        </physical_characteristics>
+        <owner_details>
+            <owner_name>Martí</owner_name>
+            <surname>Esteve</surname>
+            <address>Diagonal Avenue, 354</address>
+            <email>marti.esteve@gmail.com</email>
+            <phone>922780419</phone>
+        </owner_details>
+        <vaccinations>
+            <vaccine laboratory="Virbac Laboratory">
+                <vaccine_name>Rabies vaccine</vaccine_name>
+                <administration_date>19/04/2024</administration_date>
+                <next_administration_date>19/04/2025</next_administration_date>
+            </vaccine>
+        </vaccinations>
+        <visits>
+            <visit>
+                <visit_id>3</visit_id>
+                <visit_date>27/08/2024</visit_date>
+                <reason_for_visit>Leg injury, suspected fracture</reason_for_visit>
+                <diagnosis>Fracture in the left leg bone. Pain, swelling, and difficulty walking.</diagnosis>
+                <treatment>X-rays performed to confirm fracture. Leg immobilized with a bandage and pain medication administered.</treatment>
+                <discharge_status>Follow-up recommended</discharge_status>
+            </visit>
+            <visit>
+                <visit_id>4</visit_id>
+                <visit_date>13/09/2024</visit_date>
+                <reason_for_visit>Leg check-up after immobilization</reason_for_visit>
+                <diagnosis>Visible improvement. Less swelling, and the dog walks better. X-rays show good bone consolidation.</diagnosis>
+                <treatment>Continue using the bandage for 1 more week. Control pain with medication if necessary.</treatment>
+                <discharge_status>Resolved</discharge_status>
+            </visit>
+        </visits>
+    </pet>
+    <pet pet_id="M_004">
+        <chip>0xAA12BC</chip>
+        <pet_name>Simba</pet_name>
+        <birth_date>05/05/2022</birth_date>
+        <pedigree>true</pedigree>
+        <physical_characteristics>
+            <weight>4.3 kg</weight>
+            <sex value="Male"/>
+            <color>Orange</color>
+            <photo>assets/img/dog-4.jpg</photo>
+            <fur_type value="Short"/>
+        </physical_characteristics>
+        <owner_details>
+            <owner_name>Laura</owner_name>
+            <surname>Domènech</surname>
+            <address>Rambla Catalunya, 78</address>
+            <email>laura.domen@gmail.com</email>
+            <phone>611289432</phone>
+        </owner_details>
+        <vaccinations>
+            <vaccine laboratory="Zoetis Laboratory">
+                <vaccine_name>Feline trivalent vaccine</vaccine_name>
+                <administration_date>11/06/2023</administration_date>
+                <next_administration_date>11/06/2024</next_administration_date>
+            </vaccine>
+        </vaccinations>
+        <visits>
+            <visit>
+                <visit_id>5</visit_id>
+                <visit_date>11/06/2023</visit_date>
+                <reason_for_visit>Annual vaccination</reason_for_visit>
+                <diagnosis>No symptoms. General check-up normal.</diagnosis>
+                <treatment>Trivalent vaccine administered.</treatment>
+                <discharge_status>Resolved</discharge_status>
+            </visit>
+        </visits>
+    </pet>
+    <pet pet_id="M_005">
+        <chip>0xBB34DE</chip>
+        <pet_name>Thor</pet_name>
+        <birth_date>23/11/2019</birth_date>
+        <pedigree>false</pedigree>
+        <physical_characteristics>
+            <weight>42.0 kg</weight>
+            <sex value="Male"/>
+            <color>Black</color>
+            <photo>assets/img/dog-5.jpg</photo>
+            <fur_type value="Short"/>
+        </physical_characteristics>
+        <owner_details>
+            <owner_name>Jordi</owner_name>
+            <surname>Martínez</surname>
+            <address>Sants Street, 21</address>
+            <email>jordi.martinez@hotmail.com</email>
+            <phone>677908341</phone>
+        </owner_details>
+        <vaccinations>
+            <vaccine laboratory="Boehringer Ingelheim Laboratory">
+                <vaccine_name>Tetravalent vaccine</vaccine_name>
+                <administration_date>15/10/2023</administration_date>
+                <next_administration_date>15/10/2024</next_administration_date>
+            </vaccine>
+        </vaccinations>
+        <visits>
+            <visit>
+                <visit_id>6</visit_id>
+                <visit_date>15/10/2023</visit_date>
+                <reason_for_visit>Annual check-up</reason_for_visit>
+                <diagnosis>No anomalies.</diagnosis>
+                <treatment>Tetravalent vaccine administered.</treatment>
+                <discharge_status>Resolved</discharge_status>
+            </visit>
+        </visits>
+    </pet>
+    <pet pet_id="M_006">
+        <chip>0xCDEA23</chip>
+        <pet_name>Mia</pet_name>
+        <birth_date>12/02/2023</birth_date>
+        <pedigree>false</pedigree>
+        <physical_characteristics>
+            <weight>3.7 kg</weight>
+            <sex value="Female"/>
+            <color>Gray</color>
+            <photo>assets/img/dog-6.jpg</photo>
+            <fur_type value="Short"/>
+        </physical_characteristics>
+        <owner_details>
+            <owner_name>Marina</owner_name>
+            <surname>Solé</surname>
+            <address>Gran Via, 410</address>
+            <email>marina.sole@gmail.com</email>
+            <phone>634985210</phone>
+        </owner_details>
+        <vaccinations>
+            <vaccine laboratory="Virbac Laboratory">
+                <vaccine_name>Feline leukemia vaccine</vaccine_name>
+                <administration_date>05/09/2023</administration_date>
+                <next_administration_date>05/09/2024</next_administration_date>
+            </vaccine>
+        </vaccinations>
+        <visits>
+            <visit>
+                <visit_id>7</visit_id>
+                <visit_date>05/09/2023</visit_date>
+                <reason_for_visit>First vaccination</reason_for_visit>
+                <diagnosis>Healthy cat, no parasites or physical issues.</diagnosis>
+                <treatment>Feline leukemia vaccine administered.</treatment>
+                <discharge_status>Resolved</discharge_status>
+            </visit>
+        </visits>
+    </pet>
+    <pet pet_id="M_007">
+        <chip>0xDD56EF</chip>
+        <pet_name>Baloo</pet_name>
+        <birth_date>30/08/2021</birth_date>
+        <pedigree>true</pedigree>
+        <physical_characteristics>
+            <weight>28.4 kg</weight>
+            <sex value="Male"/>
+            <color>Blue-gray</color>
+            <photo>assets/img/dog-7.jpg</photo>
+            <fur_type value="Medium"/>
+        </physical_characteristics>
+        <owner_details>
+            <owner_name>Clara</owner_name>
+            <surname>Navarro</surname>
+            <address>Gran Street, 12</address>
+            <email>clara.navarro@gmail.com</email>
+            <phone>698120345</phone>
+        </owner_details>
+        <vaccinations>
+            <vaccine laboratory="Boehringer Ingelheim Laboratory">
+                <vaccine_name>Polyvalent vaccine</vaccine_name>
+                <administration_date>10/01/2024</administration_date>
+                <next_administration_date>10/01/2025</next_administration_date>
+            </vaccine>
+        </vaccinations>
+        <visits>
+            <visit>
+                <visit_id>8</visit_id>
+                <visit_date>10/01/2024</visit_date>
+                <reason_for_visit>Vaccination and deworming</reason_for_visit>
+                <diagnosis>Good general condition. No external or internal parasites.</diagnosis>
+                <treatment>Polyvalent vaccine administered and antiparasitic pipette applied.</treatment>
+                <discharge_status>Resolved</discharge_status>
+            </visit>
+        </visits>
+    </pet>
+    <pet pet_id="M_008">
+        <chip>0xEF78A1</chip>
+        <pet_name>Lola</pet_name>
+        <birth_date>11/12/2020</birth_date>
+        <pedigree>false</pedigree>
+        <physical_characteristics>
+            <weight>2.8 kg</weight>
+            <sex value="Female"/>
+            <color>White with black spots</color>
+            <photo>assets/img/dog-8.jpg</photo>
+            <fur_type value="Short"/>
+        </physical_characteristics>
+        <owner_details>
+            <owner_name>Òscar</owner_name>
+            <surname>Ribas</surname>
+            <address>Travessera de Gràcia, 200</address>
+            <email>oscar.ribas@gmail.com</email>
+            <phone>600125874</phone>
+        </owner_details>
+        <vaccinations>
+            <vaccine laboratory="Virbac Laboratory">
+                <vaccine_name>Feline panleukopenia vaccine</vaccine_name>
+                <administration_date>20/12/2023</administration_date>
+                <next_administration_date>20/12/2024</next_administration_date>
+            </vaccine>
+        </vaccinations>
+        <visits>
+            <visit>
+                <visit_id>9</visit_id>
+                <visit_date>20/12/2023</visit_date>
+                <reason_for_visit>Annual check-up</reason_for_visit>
+                <diagnosis>Cat in good condition. Minor eye infection treated with ointment.</diagnosis>
+                <treatment>Eye ointment for 5 days. Vaccine administered.</treatment>
+                <discharge_status>Follow-up recommended</discharge_status>
+            </visit>
+        </visits>
+    </pet>
+    <pet pet_id="M_009">
+        <chip>0xF1A2C3</chip>
+        <pet_name>Bruce</pet_name>
+        <birth_date>01/04/2018</birth_date>
+        <pedigree>true</pedigree>
+        <physical_characteristics>
+            <weight>50.2 kg</weight>
+            <sex value="Male"/>
+            <color>Beige</color>
+            <photo>assets/img/dog-9.jpg</photo>
+            <fur_type value="Short"/>
+        </physical_characteristics>
+        <owner_details>
+            <owner_name>Roger</owner_name>
+            <surname>Ferrer</surname>
+            <address>Plaça Espanya, 3</address>
+            <email>roger.ferrer@outlook.com</email>
+            <phone>693450881</phone>
+        </owner_details>
+        <vaccinations>
+            <vaccine laboratory="Zoetis Laboratory">
+                <vaccine_name>Leishmaniasis vaccine</vaccine_name>
+                <administration_date>02/03/2024</administration_date>
+                <next_administration_date>02/03/2025</next_administration_date>
+            </vaccine>
+        </vaccinations>
+        <visits>
+            <visit>
+                <visit_id>10</visit_id>
+                <visit_date>02/03/2024</visit_date>
+                <reason_for_visit>Summer prevention</reason_for_visit>
+                <diagnosis>No symptoms. Routine check-up normal.</diagnosis>
+                <treatment>Leishmaniasis vaccine and antiparasitic collar applied.</treatment>
+                <discharge_status>Resolved</discharge_status>
+            </visit>
+        </visits>
+    </pet>
+    <pet pet_id="M_010">
+        <chip>0x123ABC</chip>
+        <pet_name>Minuet</pet_name>
+        <birth_date>14/06/2022</birth_date>
+        <pedigree>false</pedigree>
+        <physical_characteristics>
+            <weight>3.1 kg</weight>
+            <sex value="Female"/>
+            <color>Cream</color>
+            <photo>assets/img/dog-10.jpg</photo>
+            <fur_type value="Short"/>
+        </physical_characteristics>
+        <owner_details>
+            <owner_name>Sara</owner_name>
+            <surname>Campos</surname>
+            <address>Rosselló Street, 320</address>
+            <email>sara.campos@gmail.com</email>
+            <phone>622974563</phone>
+        </owner_details>
+        <vaccinations>
+            <vaccine laboratory="Boehringer Ingelheim Laboratory">
+                <vaccine_name>Feline trivalent vaccine</vaccine_name>
+                <administration_date>20/06/2023</administration_date>
+                <next_administration_date>20/06/2024</next_administration_date>
+            </vaccine>
+        </vaccinations>
+        <visits>
+            <visit>
+                <visit_id>11</visit_id>
+                <visit_date>20/06/2023</visit_date>
+                <reason_for_visit>Annual vaccination</reason_for_visit>
+                <diagnosis>Complete check-up normal.</diagnosis>
+                <treatment>Trivalent vaccine administered.</treatment>
+                <discharge_status>Resolved</discharge_status>
+            </visit>
+        </visits>
+    </pet>
+</pet_records>
