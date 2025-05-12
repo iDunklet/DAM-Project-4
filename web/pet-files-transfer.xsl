@@ -23,6 +23,7 @@
                 <!-- Main Content -->
                 <main class="container">
                     
+                    <!-- arreglar esto-->
                     <section class="pet-stats">
                         <div class="stats-card">
                             <h3><xsl:value-of select="count($pets)"/></h3>
@@ -52,6 +53,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <!-- usar otro matcher para no usar for each y adicionar visitas-->
                                     <xsl:for-each select="pet_records/pet">
                                         <tr>
                                             <td>

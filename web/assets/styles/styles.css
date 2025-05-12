@@ -39,34 +39,6 @@ body {
     margin: 0 auto;
 }
 
-/* Stats Section */
-.pet-stats {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.stats-card {
-    background-color: #D1F5FF;
-    padding: 1.5rem;
-    border-radius: 10px;
-    flex: 1 1 200px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.stats-card h3 {
-    font-size: 2rem;
-    color: #34F6F2;
-}
-
-.stats-card p {
-    font-weight: bold;
-    color: #555;
-}
-
 /* Table Section */
 .pet-table-section h2 {
     margin-bottom: 1rem;
@@ -87,7 +59,7 @@ body {
 }
 
 .pet-table th, .pet-table td {
-    padding: 1rem;
+    padding: 2rem;
     text-align: left;
     border-bottom: 1px solid #D1F5FF;
 }
@@ -103,7 +75,7 @@ body {
 
 .pet-photo img {
     border-radius: 8px;
-    max-width: 80px;
+    max-width: 200px;
     height: auto;
 }
 
