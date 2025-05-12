@@ -78,7 +78,51 @@ body {
     max-width: 200px;
     height: auto;
 }
+/* Sección de estadísticas */
+.pet-stats {
+    margin-bottom: 2rem;
+}
 
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stats-card h3 {
+    font-size: 2rem;
+    color: #7D53DE;
+    margin-bottom: 0.5rem;
+}
+
+.stats-card p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.stats-icon {
+    position: absolute;
+    right: 1.5rem;
+    top: 1.5rem;
+    font-size: 2rem;
+    color: rgba(125, 83, 222, 0.1);
+}
 /* Pet Details and Owner Info */
 .pet-details span,
 .owner-info small {
@@ -179,4 +223,32 @@ body {
     margin-top: 1rem;
     font-size: 0.9rem;
     color: #D1F5FF;
+}
+/* Estilos para la columna de visitas */
+.visits {
+    max-width: 250px;
+}
+
+.visit-item {
+    padding: 0.5rem 0;
+}
+
+.visit-reason {
+    font-size: 0.85rem;
+    color: #555;
+    display: block;
+    margin: 0.3rem 0;
+}
+
+.visit-status {
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.visit-separator {
+    border: none;
+    border-top: 1px dashed #D1F5FF;
+    margin: 0.5rem 0;
 }
