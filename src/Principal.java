@@ -15,22 +15,27 @@ public class Principal {
     private final Color purple = Color.decode("#4B0082");
 
     private JPanel panelMain;
-    private JButton playButton;
+    private JButton loginButton;
     private JLabel logoLabel;
     private JButton exitButton;
     private JLabel gato1Label;
+    private JButton ingresarButton;
+    private JFrame loginFrame;
+    private JPanel loginPanel;
+    private JPasswordField passField;
+    private JLabel passLabel;
+    private JTextField userField;
+    private JLabel userLabel;
 
     public Principal() throws IOException, FontFormatException {
-
         pressStart2P = Font.createFont(Font.TRUETYPE_FONT, new File("resources/fonts/PressStart2P-Regular.ttf")).deriveFont(12f);
         GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(pressStart2P);
 
         this.panelMain();
-        this.playButton();
+        this.loginButton();
         this.logoLabel();
         this.exitButton();
         this.gato1Label();
-
     }
 
     private void gato1Label() {
@@ -52,43 +57,143 @@ public class Principal {
         int x = (1500 - logoLabel.getWidth()) / 2;
         logoLabel.setLocation(x,50);
         panelMain.add(logoLabel);
-
     }
-
-
 
     private void panelMain() {
         panelMain = new JPanel(null);
         panelMain.setSize(new Dimension(1500, 800));
         panelMain.setBackground(darkBlue);
-
     }
 
-    private void playButton() {
-        playButton = new JButton("Login");
-        playButton.setBackground(null);
-        playButton.setFont(pressStart2P.deriveFont(Font.PLAIN, 50f));
-        playButton.setSize(500, 100);
-        playButton.setForeground(brightGreen);
-        playButton.setBorderPainted(false);
-        playButton.setFocusPainted(false);
-        playButton.setContentAreaFilled(false);
-        int x = (1500 - playButton.getWidth()) / 2;
-        playButton.setLocation(x, 500);
+    private void loginButton() {
+        loginButton = new JButton("Login");
+        loginButton.setBackground(null);
+        loginButton.setFont(pressStart2P.deriveFont(Font.PLAIN, 50f));
+        loginButton.setSize(500, 100);
+        loginButton.setForeground(brightGreen);
+        loginButton.setBorderPainted(false);
+        loginButton.setFocusPainted(false);
+        loginButton.setContentAreaFilled(false);
+        int x = (1500 - loginButton.getWidth()) / 2;
+        loginButton.setLocation(x, 500);
 
-        playButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                playButton.setForeground(orange);
+                loginButton.setForeground(orange);
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                playButton.setForeground(brightGreen);
+                loginButton.setForeground(brightGreen);
             }
         });
-        panelMain.add(playButton);
+
+        loginButton.addActionListener(e -> {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(panelMain);
+            frame.dispose();
+            openLoginPage();
+        });
+
+        panelMain.add(loginButton);
     }
+
+    private void openLoginPage() {
+        loginFrame();
+        loginPanel();
+        loginLogo();
+        userLabel();
+        userField();
+        passLabel();
+        passField();
+        ingresarButton();
+
+
+        ingresarButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                ingresarButton.setForeground(orange);
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                ingresarButton.setForeground(brightGreen);
+            }
+        });
+
+        loginPanel.add(ingresarButton);
+
+        loginFrame.add(loginPanel);
+        loginFrame.setVisible(true);
+    }
+
+    private void passField() {
+        passField = new JPasswordField();
+        passField.setFont(pressStart2P.deriveFont(Font.PLAIN, 16f));
+        passField.setSize(400, 40);
+        passField.setLocation(550, 530);
+        loginPanel.add(passField);
+    }
+
+    private void passLabel() {
+        passLabel = new JLabel("Contraseña:");
+        passLabel.setFont(pressStart2P.deriveFont(Font.PLAIN, 20f));
+        passLabel.setForeground(white);
+        passLabel.setSize(200, 30);
+        passLabel.setLocation(550, 500);
+        loginPanel.add(passLabel);
+    }
+
+    private void userField() {
+        userField = new JTextField();
+        userField.setFont(pressStart2P.deriveFont(Font.PLAIN, 16f));
+        userField.setSize(400, 40);
+        userField.setLocation(550, 450);
+        loginPanel.add(userField);
+    }
+
+    private void userLabel() {
+        userLabel = new JLabel("Usuario:");
+        userLabel.setFont(pressStart2P.deriveFont(Font.PLAIN, 20f));
+        userLabel.setForeground(white);
+        userLabel.setSize(200, 30);
+        userLabel.setLocation(550, 420);
+        loginPanel.add(userLabel);
+    }
+
+    private void loginLogo() {
+        ImageIcon icon = new ImageIcon("resources/img/logo.png");
+        Image image = icon.getImage().getScaledInstance(400, 350, Image.SCALE_SMOOTH);
+        JLabel loginLogo = new JLabel(new ImageIcon(image));
+        loginLogo.setSize(400, 350);
+        int xLogo = (1500 - loginLogo.getWidth()) / 2;
+        loginLogo.setLocation(xLogo, 50);
+        loginPanel.add(loginLogo);
+    }
+
+    private void loginPanel() {
+        loginPanel = new JPanel(null);
+        loginPanel.setBackground(darkBlue);
+        loginPanel.setSize(1500, 800);
+    }
+
+    private void loginFrame() {
+        loginFrame = new JFrame("Login");
+        loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loginFrame.setSize(1500, 800);
+        loginFrame.setLocationRelativeTo(null);
+    }
+
+    private void ingresarButton() {
+        ingresarButton = new JButton("Ingresar");
+        ingresarButton.setFont(pressStart2P.deriveFont(Font.PLAIN, 20f));
+        ingresarButton.setForeground(brightGreen);
+        ingresarButton.setBackground(darkBlue);
+        ingresarButton.setBorderPainted(false);
+        ingresarButton.setFocusPainted(false);
+        ingresarButton.setContentAreaFilled(false);
+        ingresarButton.setSize(200, 50);
+        ingresarButton.setLocation(650, 600);
+    }
+
     private void exitButton() {
         exitButton = new JButton("exit");
         exitButton.setBackground(null);
