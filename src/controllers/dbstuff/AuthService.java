@@ -82,7 +82,39 @@ public class AuthService {
         }
         return data;
     }
+    public static int getUserId(String username) {
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            String query = "SELECT id_user FROM users WHERE name = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
 
+            if (rs.next()) {
+                return rs.getInt("id_user");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    // Método para guardar la selección del palo
+    public static boolean saveClubSelection(String username, ClubType clubType) {
+        int userId = getUserId(username);
+        if (userId == -1) return false;
+
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            String insert = "INSERT INTO points (ID_user, clubs_Types, round_duration, money, points) VALUES (?, ?, 0, 0, 0)";
+            PreparedStatement insertStmt = conn.prepareStatement(insert);
+            insertStmt.setInt(1, userId);
+            insertStmt.setString(2, clubType.toString());
+            insertStmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 
 }
