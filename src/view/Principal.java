@@ -1,6 +1,6 @@
 package view;
 
-import dbstuff.AuthService;
+import controllers.dbstuff.AuthService;
 
 import javax.swing.*;
 import java.awt.*;

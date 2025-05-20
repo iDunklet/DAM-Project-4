@@ -1,4 +1,4 @@
-package dbstuff;
+package controllers.dbstuff;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

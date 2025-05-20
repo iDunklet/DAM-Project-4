@@ -1,4 +1,4 @@
-package dbstuff;
+package controllers.dbstuff;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -6,11 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import java.sql.*;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.mysql.cj.telemetry.TelemetryAttribute.DB_USER;
 
 public class AuthService {
     private static final String URL = "jdbc:mysql://localhost:3306/golf_game";
