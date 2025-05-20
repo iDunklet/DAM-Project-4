@@ -209,6 +209,7 @@ public class Principal {
                 if (success) {
                     JOptionPane.showMessageDialog(null, "Login exitoso");
                     loginFrame.dispose();
+                    openUserPage();
                 } else {
                     JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos");
                 }
@@ -217,6 +218,53 @@ public class Principal {
             }
         });
     }
+
+    private void openUserPage() {
+        userFrame();
+    }
+
+    private void userFrame() {
+        JFrame userFrame = new JFrame("Usuario");
+        userFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        userFrame.setSize(1500, 800);
+        userFrame.setLocationRelativeTo(null);
+
+        JPanel userPanel = new JPanel();
+        userPanel.setLayout(null);
+        userPanel.setBackground(darkBlue);
+
+        JButton playButton = new JButton("Jugar");
+        playButton.setBounds(600, 300, 300, 60);
+        playButton.setFont(pressStart2P.deriveFont(Font.PLAIN, 20f));
+        playButton.setForeground(brightGreen);
+        playButton.setContentAreaFilled(false);
+        playButton.setBorderPainted(false);
+        playButton.setFocusPainted(false);
+        userPanel.add(playButton);
+
+        JButton scoresButton = new JButton("Puntuaciones");
+        scoresButton.setBounds(600, 400, 300, 60);
+        scoresButton.setFont(pressStart2P.deriveFont(Font.PLAIN, 20f));
+        scoresButton.setForeground(brightGreen);
+        scoresButton.setContentAreaFilled(false);
+        scoresButton.setBorderPainted(false);
+        scoresButton.setFocusPainted(false);
+        userPanel.add(scoresButton);
+
+        JButton logoutButton = new JButton("Salir");
+        logoutButton.setBounds(600, 500, 300, 60);
+        logoutButton.setFont(pressStart2P.deriveFont(Font.PLAIN, 20f));
+        logoutButton.setForeground(orange);
+        logoutButton.setContentAreaFilled(false);
+        logoutButton.setBorderPainted(false);
+        logoutButton.setFocusPainted(false);
+        logoutButton.addActionListener(e -> System.exit(0));
+        userPanel.add(logoutButton);
+
+        userFrame.setContentPane(userPanel);
+        userFrame.setVisible(true);
+    }
+
 
     private void exitButton() {
         exitButton = new JButton("exit");
