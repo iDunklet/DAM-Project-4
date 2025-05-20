@@ -30,6 +30,13 @@ public class Principal {
     private JLabel passLabel;
     private JTextField userField;
     private JLabel userLabel;
+    private JFrame userFrame;
+    private JPanel userPanel;
+    private JButton playButton;
+    private JButton scoresButton;
+    private JButton logoutButton;
+
+
 
     public Principal() throws IOException, FontFormatException {
         pressStart2P = Font.createFont(Font.TRUETYPE_FONT, new File("resources/fonts/PressStart2P-Regular.ttf")).deriveFont(12f);
@@ -113,19 +120,23 @@ public class Principal {
         ingresarButton();
 
 
-        ingresarButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                ingresarButton.setForeground(orange);
-            }
-
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                ingresarButton.setForeground(brightGreen);
-            }
-        });
+        hoverButtonBrightGreenForOrange(ingresarButton);
 
         loginPanel.add(ingresarButton);
         loginFrame.add(loginPanel);
         loginFrame.setVisible(true);
+    }
+
+    private void hoverButtonBrightGreenForOrange(JButton button) {
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setForeground(orange);
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setForeground(brightGreen);
+            }
+        });
     }
 
     private void passField() {
@@ -221,37 +232,16 @@ public class Principal {
 
     private void openUserPage() {
         userFrame();
+        userPanel();
+        playButton();
+        scoresButton();
+        logoButton();
+        userFrame.setContentPane(userPanel);
+        userFrame.setVisible(true);
     }
 
-    private void userFrame() {
-        JFrame userFrame = new JFrame("Usuario");
-        userFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        userFrame.setSize(1500, 800);
-        userFrame.setLocationRelativeTo(null);
-
-        JPanel userPanel = new JPanel();
-        userPanel.setLayout(null);
-        userPanel.setBackground(darkBlue);
-
-        JButton playButton = new JButton("Jugar");
-        playButton.setBounds(600, 300, 300, 60);
-        playButton.setFont(pressStart2P.deriveFont(Font.PLAIN, 20f));
-        playButton.setForeground(brightGreen);
-        playButton.setContentAreaFilled(false);
-        playButton.setBorderPainted(false);
-        playButton.setFocusPainted(false);
-        userPanel.add(playButton);
-
-        JButton scoresButton = new JButton("Puntuaciones");
-        scoresButton.setBounds(600, 400, 300, 60);
-        scoresButton.setFont(pressStart2P.deriveFont(Font.PLAIN, 20f));
-        scoresButton.setForeground(brightGreen);
-        scoresButton.setContentAreaFilled(false);
-        scoresButton.setBorderPainted(false);
-        scoresButton.setFocusPainted(false);
-        userPanel.add(scoresButton);
-
-        JButton logoutButton = new JButton("Salir");
+    private void logoButton() {
+        logoutButton = new JButton("Salir");
         logoutButton.setBounds(600, 500, 300, 60);
         logoutButton.setFont(pressStart2P.deriveFont(Font.PLAIN, 20f));
         logoutButton.setForeground(orange);
@@ -260,9 +250,49 @@ public class Principal {
         logoutButton.setFocusPainted(false);
         logoutButton.addActionListener(e -> System.exit(0));
         userPanel.add(logoutButton);
+    }
 
-        userFrame.setContentPane(userPanel);
-        userFrame.setVisible(true);
+    private void scoresButton() {
+        scoresButton = new JButton("Puntuaciones");
+        scoresButton.setBounds(600, 400, 300, 60);
+        scoresButton.setFont(pressStart2P.deriveFont(Font.PLAIN, 20f));
+        scoresButton.setForeground(brightGreen);
+        scoresButton.setContentAreaFilled(false);
+        scoresButton.setBorderPainted(false);
+        scoresButton.setFocusPainted(false);
+        userPanel.add(scoresButton);
+        hoverButtonBrightGreenForOrange(scoresButton);
+
+        scoresButton.addActionListener(e -> {
+            userFrame.dispose();
+            openScorePage();
+        });
+    }
+
+    private void playButton() {
+        playButton = new JButton("Jugar");
+        playButton.setBounds(600, 300, 300, 60);
+        playButton.setFont(pressStart2P.deriveFont(Font.PLAIN, 20f));
+        playButton.setForeground(brightGreen);
+        playButton.setContentAreaFilled(false);
+        playButton.setBorderPainted(false);
+        playButton.setFocusPainted(false);
+        userPanel.add(playButton);
+        hoverButtonBrightGreenForOrange(playButton);
+
+    }
+
+    private void userPanel() {
+        userPanel = new JPanel();
+        userPanel.setLayout(null);
+        userPanel.setBackground(darkBlue);
+    }
+
+    private void userFrame() {
+        userFrame = new JFrame("Usuario");
+        userFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        userFrame.setSize(1500, 800);
+        userFrame.setLocationRelativeTo(null);
     }
 
 
@@ -304,6 +334,48 @@ public class Principal {
             }
         });
     }
+    private void openScorePage() {
+        JFrame scoreFrame = new JFrame("Puntuaciones Globales");
+        scoreFrame.setSize(1700, 600);
+        scoreFrame.setLocationRelativeTo(null);
+        scoreFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(darkBlue);
+
+        String[] columnNames = {
+                "Usuario", "Contraseña", "ID Puntos", "Tipo de Club",
+                "Duración Ronda", "Dinero", "Puntos", "Fecha"
+        };
+
+        Object[][] data = AuthService.getAllUsersWithPoints();
+
+        JTable table = new JTable(data, columnNames);
+        table.setFont(pressStart2P.deriveFont(Font.PLAIN, 12f));
+        table.setForeground(brightGreen);
+        table.setBackground(Color.BLACK);
+        table.setRowHeight(30);
+        table.setGridColor(purple);
+        table.setEnabled(false);
+        table.getTableHeader().setFont(pressStart2P.deriveFont(Font.PLAIN, 14f));
+        table.getTableHeader().setForeground(orange);
+        table.getTableHeader().setBackground(Color.BLACK);
+
+        JLabel titleLabel = new JLabel("Puntuaciones Globales", SwingConstants.CENTER);
+        titleLabel.setFont(pressStart2P.deriveFont(Font.PLAIN, 24f));
+        titleLabel.setForeground(brightGreen);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        panel.add(titleLabel, BorderLayout.NORTH);
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.getViewport().setBackground(Color.BLACK);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        scoreFrame.add(panel);
+        scoreFrame.setVisible(true);
+    }
+
 
     public static void main(String[] args) throws IOException, FontFormatException {
         JFrame frame = new JFrame("Principal");
