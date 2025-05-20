@@ -1,3 +1,7 @@
+package view;
+
+import dbstuff.AuthService;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -191,6 +195,27 @@ public class Principal {
         ingresarButton.setContentAreaFilled(false);
         ingresarButton.setSize(200, 50);
         ingresarButton.setLocation(650, 600);
+        actioningresarButton();
+    }
+
+    private void actioningresarButton() {
+        ingresarButton.addActionListener(e -> {
+            String name = userField.getText().trim();
+            String password = new String(passField.getPassword()).trim();
+
+            if (!name.isEmpty() && !password.isEmpty()) {
+                boolean success = AuthService.loginOrCreateUser(name, password);
+
+                if (success) {
+                    JOptionPane.showMessageDialog(null, "Login exitoso");
+                    loginFrame.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese usuario y contraseña");
+            }
+        });
     }
 
     private void exitButton() {
