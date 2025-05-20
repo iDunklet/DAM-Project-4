@@ -120,7 +120,6 @@ public class Principal {
         });
 
         loginPanel.add(ingresarButton);
-
         loginFrame.add(loginPanel);
         loginFrame.setVisible(true);
     }
@@ -137,7 +136,7 @@ public class Principal {
         passLabel = new JLabel("Contraseña:");
         passLabel.setFont(pressStart2P.deriveFont(Font.PLAIN, 20f));
         passLabel.setForeground(white);
-        passLabel.setSize(200, 30);
+        passLabel.setSize(300, 30);
         passLabel.setLocation(550, 500);
         loginPanel.add(passLabel);
     }
