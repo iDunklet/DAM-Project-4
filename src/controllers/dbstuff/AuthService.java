@@ -115,6 +115,55 @@ public class AuthService {
             return false;
         }
     }
+    public static boolean saveScore(String username, ClubType clubType, int strokes, long durationSeconds, int points) {
+        int userId = getUserId(username);
+        if (userId == -1) return false;
+
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            String insert = "INSERT INTO points (ID_user, clubs_Types, round_duration, money, points) VALUES (?, ?, ?, 0, ?)";
+            PreparedStatement insertStmt = conn.prepareStatement(insert);
+            insertStmt.setInt(1, userId);
+            insertStmt.setString(2, clubType.toString());
+            insertStmt.setLong(3, durationSeconds);
+            insertStmt.setInt(4, points);
+            insertStmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static Object[] getLastUserScore(String username) {
+        int userId = getUserId(username);
+        if (userId == -1) return null;
+
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            String query = """
+            SELECT p.clubs_Types, p.round_duration, p.points 
+            FROM points p 
+            WHERE p.ID_user = ? 
+            ORDER BY p.Date DESC 
+            LIMIT 1
+            """;
+
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                ClubType clubType = ClubType.valueOf(rs.getString("clubs_Types"));
+                long duration = rs.getLong("round_duration");
+                int points = rs.getInt("points");
+
+                return new Object[]{clubType, duration, points};
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 
 }
