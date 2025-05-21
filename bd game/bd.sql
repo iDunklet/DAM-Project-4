@@ -17,7 +17,7 @@ CREATE TABLE if not exists Points (
                         Date DATETIME DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (ID_user) REFERENCES Users(id_user)
 );
-select * from Points
+select * from Points;
 
 ALTER TABLE Points
     MODIFY COLUMN clubs_Types ENUM('DRIVER', 'IRON', 'WOOD') NOT NULL;

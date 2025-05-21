@@ -1,11 +1,12 @@
 package view;
 
-import controllers.dbstuff.AuthService;
-import controllers.dbstuff.ClubType;
-import model.Driver;
-import model.Iron;
-import model.Putter;
-import model.Wood;
+
+
+import controllers.AuthController;
+import controllers.ScoreController;
+import model.*;
+import model.userStuff.Score;
+import model.userStuff.User;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -17,20 +18,24 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ArrayList;
 import java.awt.Rectangle;
 
-public class Principal {
+public class Main {
 
     // recorrido
     private List<Rectangle> obstacles = new ArrayList<>();
+    private ScoreController scoreController;
 
 
     // Variables para la física de la pelota
-    private Point ballPosition = new Point(100, 400); // Posición inicial
-    private Point badBallPosition = new Point(400, 400);
+    private Point ballPosition = new Point(950, 100); // Posición inicial
+    private Point badBallPosition = new Point(600, 400);
     private Point dragStart; // comienza el arrastre
     private Point dragEnd; // termina el arrastre
     private boolean isDragging = false;
@@ -107,7 +112,7 @@ public class Principal {
 
 
     // CONSTRUCTOR PRINCIPAL
-    public Principal() {
+    public Main() {
         try {
             loadFont();
             goodCat = new ImageIcon("resources/img/goodCat.jpg"); // Asegúrate de tener esta imagen
@@ -355,12 +360,16 @@ public class Principal {
                 JOptionPane.showMessageDialog(null, "Please enter username and password");
                 return;
             }
-            if (AuthService.loginOrCreateUser(name, password)) {
-                loginFrame.dispose();
-                openUserPage();
-            } else {
-                JOptionPane.showMessageDialog(null, "Error connecting to database");
-            }
+            utils.DatabaseConnection dbConnection = new utils.DatabaseConnection();
+            AuthController authController = new AuthController(dbConnection);
+
+            // Call instance method
+            User user = authController.loginOrRegister(name, password);
+
+            loginFrame.dispose();
+            openUserPage();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Login error: " + e.getMessage());
         }
@@ -446,6 +455,9 @@ public class Principal {
     // MÉTODOS DE LA PÁGINA DE PUNTUACIONES
     private void openScoresPage() {
         try {
+            utils.DatabaseConnection dbConnection = new utils.DatabaseConnection();
+            ScoreController scoreController = new ScoreController(dbConnection);
+
             frameScores = new JFrame("Global Scores");
             frameScores.setSize(1700, 600);
             frameScores.setLocationRelativeTo(null);
@@ -457,7 +469,12 @@ public class Principal {
             String[] columns = {"Username", "Password", "Score ID", "Club Type",
                     "Round Duration", "Money", "Points", "Date"};
 
-            JTable table = createScoresTable(columns, AuthService.getAllUsersWithPoints());
+            // Get scores and convert to Object[][]
+            List<Score> scores = scoreController.getAllScores();
+            Object[][] data = convertScoresToTableData(scores);
+
+            JTable table = createScoresTable(columns, data);
+
 
             JScrollPane scrollPane = new JScrollPane(table);
             scrollPane.getViewport().setBackground(Color.BLACK);
@@ -514,6 +531,25 @@ public class Principal {
             JOptionPane.showMessageDialog(null, "Error opening scores page: " + e.getMessage());
         }
     }
+    private Object[][] convertScoresToTableData(List<Score> scores) {
+        Object[][] data = new Object[scores.size()][8];
+
+        for (int i = 0; i < scores.size(); i++) {
+            Score score = scores.get(i);
+            data[i] = new Object[]{
+                    score.getUser().getUsername(),
+                    score.getUser().getPassword(),
+                    score.getId(),
+                    score.getClubType().toString(),
+                    score.getRoundDuration(),
+                    score.getMoney(),
+                    score.getPoints(),
+                    score.getDate()
+            };
+        }
+        return data;
+    }
+
 
     private JTable createScoresTable(String[] columns, Object[][] data) {
         JTable table = new JTable(data, columns);
@@ -666,6 +702,7 @@ public class Principal {
     }
 
     private void openGameFrame(String username) {
+
         strokeCount = 0;
         startTime = System.currentTimeMillis();
         collisionHandled = false;
@@ -674,13 +711,133 @@ public class Principal {
         gameFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         gameFrame.setSize(1500, 800);
         gameFrame.setLocationRelativeTo(null);
+        gameFrame.getRootPane().setBorder(BorderFactory.createEmptyBorder());
 
         // Resetear posición inicial de la pelota
-        ballPosition = new Point(1350, 95);
-        badBallPosition = new Point(900, 400);
         isBallMoving = false;
         isDragging = false;
 
+        // Panel principal que contendrá ambos paneles (menú y juego)
+        JPanel mainContainer = new JPanel(new BorderLayout()) {
+            @Override
+            public Insets getInsets() {
+                return new Insets(0, 0, 0, 0); // Eliminar márgenes internos
+            }
+        };
+        mainContainer.setBorder(BorderFactory.createEmptyBorder());
+
+        // Panel lateral - ajustar tamaño exacto
+        JPanel sidePanel = createSidePanel(username);
+        sidePanel.setPreferredSize(new Dimension(300, 800));
+        sidePanel.setBorder(BorderFactory.createEmptyBorder());
+
+        // Panel de juego - ajustar tamaño exacto
+        JPanel gamePanel = createGamePanel();
+        gamePanel.setBorder(BorderFactory.createEmptyBorder());
+
+        mainContainer.add(sidePanel, BorderLayout.WEST);
+        mainContainer.add(gamePanel, BorderLayout.CENTER);
+
+        gameFrame.setContentPane(mainContainer);
+        gameFrame.setVisible(true);
+
+        Timer gameTimer = new Timer(16, e -> {
+                updateBallPosition();
+                gamePanel.repaint();
+                updateTimer();
+                gamePanel.repaint();
+        });
+        gameTimer.start();
+    }
+    private JPanel createSidePanel(String username) {
+        JPanel sidePanel = new JPanel();
+        sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
+        sidePanel.setPreferredSize(new Dimension(300, 800));
+        sidePanel.setBackground(new Color(20, 20, 40)); // Color oscuro
+
+        // Estilo para las etiquetas
+        Font infoFont = pressStart2P.deriveFont(14f);
+        Color textColor = Color.WHITE;
+
+        // Información del jugador
+        JLabel playerLabel = new JLabel("Jugador: " + username);
+        playerLabel.setFont(infoFont);
+        playerLabel.setForeground(textColor);
+        playerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        playerLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+
+        // Contador de golpes
+        JLabel strokesLabel = new JLabel("Golpes: 0");
+        strokesLabel.setFont(infoFont);
+        strokesLabel.setForeground(textColor);
+        strokesLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        strokesLabel.setName("strokesLabel"); // Para poder actualizarlo luego
+
+        // Temporizador
+        JLabel timeLabel = new JLabel("Tiempo: 00:00");
+        timeLabel.setFont(infoFont);
+        timeLabel.setForeground(textColor);
+        timeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        timeLabel.setName("timeLabel"); // Para poder actualizarlo luego
+
+        // Palo seleccionado
+        JLabel clubLabel = new JLabel("Palo: " + selectedClubType.toString());
+        clubLabel.setFont(infoFont);
+        clubLabel.setForeground(textColor);
+        clubLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Separador
+        JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
+        separator.setForeground(brightGreen);
+        separator.setMaximumSize(new Dimension(0, 5));
+
+        // Área del ordenador
+        JPanel computerPanel = createComputerPanel();
+
+        // Añadir componentes al panel lateral
+        sidePanel.add(playerLabel);
+        sidePanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        sidePanel.add(strokesLabel);
+        sidePanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        sidePanel.add(timeLabel);
+        sidePanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        sidePanel.add(clubLabel);
+        sidePanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        sidePanel.add(separator);
+        sidePanel.add(Box.createVerticalGlue());
+        sidePanel.add(computerPanel);
+
+        return sidePanel;
+    }
+    private JPanel createComputerPanel() {
+        JPanel computerPanel = new JPanel();
+        computerPanel.setLayout(new BoxLayout(computerPanel, BoxLayout.Y_AXIS));
+        computerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        computerPanel.setBackground(new Color(20, 20, 40));
+        computerPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 20, 10));
+
+        // Imagen del ordenador
+        try {
+            ImageIcon computerIcon = new ImageIcon("resources/img/computer.png");
+            Image scaledComputer = computerIcon.getImage().getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+            JLabel computerLabel = new JLabel(new ImageIcon(scaledComputer));
+            computerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            computerPanel.add(computerLabel);
+
+            // GIF sobre el ordenador
+            ImageIcon gifIcon = new ImageIcon("resources/gifs/typing.gif"); // Cambia por tu GIF
+            JLabel gifLabel = new JLabel(gifIcon);
+            gifLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            gifLabel.setBorder(BorderFactory.createEmptyBorder(-50, 0, 0, 0)); // Ajusta posición
+
+            computerPanel.add(gifLabel);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error loading computer image: " + e.getMessage());
+        }
+
+        return computerPanel;
+    }
+    private JPanel createGamePanel() {
         JPanel gamePanel = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -691,7 +848,7 @@ public class Principal {
 
                 // Hoyo
                 g.setColor(Color.BLACK);
-                g.fillOval(1250, 650, 30, 30);
+                g.fillOval(1000, 650, 30, 30);
 
                 //baCat
                 Image badImg = badCat.getImage();
@@ -702,7 +859,6 @@ public class Principal {
                 }
 
                 // good cat
-
                 Image goodImg = goodCat.getImage();
                 int diameter = BALL_RADIUS * 2;
                 g.drawImage(goodImg,
@@ -716,8 +872,6 @@ public class Principal {
                         badBallPosition.y - BALL_RADIUS,
                         diameter, diameter, this);
 
-
-
                 // Línea de dirección (solo cuando se arrastra)
                 if (isDragging && dragStart != null && dragEnd != null) {
                     g.setColor(Color.RED);
@@ -730,47 +884,47 @@ public class Principal {
                 }
             }
         };
-        holeRect = new Rectangle(1300, 200, 30, 30);
+        gamePanel.setBounds(0, 0, 1200, 800);
+
+
+
+        holeRect = new Rectangle(1000, 650, 30, 30);
         ballRect = new Rectangle(ballPosition.x - BALL_RADIUS, ballPosition.y - BALL_RADIUS,
                 BALL_RADIUS * 2, BALL_RADIUS * 2);
-        //quadrado
 
-        Rectangle bottomWall = new Rectangle(300, gameFrame.getHeight() - 50, gameFrame.getWidth() - 300, 50);
+        // Configurar obstáculos (tu código existente)
+        gamePanel.setBounds(0, 0, 1200, 800);
 
-        Rectangle rightWall = new Rectangle(gameFrame.getWidth() - 50, 0, 50, gameFrame.getHeight());
+        // Ajustar las coordenadas de los obstáculos
+        Rectangle bottomWall = new Rectangle(0, gameFrame.getHeight() - 50, 1200, 50);
+        Rectangle rightWall = new Rectangle(1200 - 50, 0, 50, gameFrame.getHeight());
+        Rectangle topWall = new Rectangle(0, 0, 1200, 50);
+        Rectangle leftConnector = new Rectangle(0, 0, 50, gameFrame.getHeight());
 
-        Rectangle topWall = new Rectangle(300, 0, gameFrame.getWidth() - 300, 50);
-
-        Rectangle leftConnector = new Rectangle(300, 0, 50, gameFrame.getHeight());
-
-
+        obstacles.clear();
         obstacles.add(bottomWall);
         obstacles.add(rightWall);
         obstacles.add(topWall);
         obstacles.add(leftConnector);
 
-        //S
-        // Tramos horizontales de la S
-        Rectangle sTop = new Rectangle(600, 150, 900, 30);
-        Rectangle sMiddle = new Rectangle(300, 350, 900, 30);
-        Rectangle sBottom = new Rectangle(600, 550, 900, 30);
+        // Ajustar posición de la S
+        Rectangle sTop = new Rectangle(300, 150, 900, 30);
+        Rectangle sMiddle = new Rectangle(0, 350, 900, 30);
+        Rectangle sBottom = new Rectangle(300, 550, 900, 30);
 
         obstacles.add(sTop);
         obstacles.add(sMiddle);
         obstacles.add(sBottom);
 
-
-        // Mouse listeners
+        // Mouse listeners (tu código existente)
         gamePanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-
-                    if (isPointInBall(e.getPoint())) {
-                        isDragging = true;
-                        dragStart = e.getPoint();
-                        dragEnd = e.getPoint();
-                    }
-
+                if (isPointInBall(e.getPoint())) {
+                    isDragging = true;
+                    dragStart = e.getPoint();
+                    dragEnd = e.getPoint();
+                }
             }
 
             @Override
@@ -780,6 +934,7 @@ public class Principal {
                     dragEnd = e.getPoint();
                     launchBall();
                     strokeCount++; // Contar cada golpe
+                    updateStrokesLabel(); // Actualizar el contador
                     gamePanel.repaint();
                 }
             }
@@ -795,31 +950,39 @@ public class Principal {
             }
         });
 
-        // Timer para la animación
-        Timer gameLoopTimer = new Timer(16, e -> {
-            updatebadCatPosition();
-            checkCatCollision();
-
-            if (isBallMoving) {
-                updateBallPosition();
-                checkHoleCollision();
+        return gamePanel;
+    }
+    private void updateStrokesLabel() {
+        Component[] components = gameFrame.getContentPane().getComponents();
+        for (Component comp : components) {
+            if (comp instanceof JPanel) {
+                JPanel sidePanel = (JPanel) comp;
+                Component[] sideComponents = sidePanel.getComponents();
+                for (Component sideComp : sideComponents) {
+                    if (sideComp instanceof JLabel && "strokesLabel".equals(sideComp.getName())) {
+                        ((JLabel) sideComp).setText("Golpes: " + strokeCount);
+                    }
+                }
             }
+        }
+    }
+    private void updateTimer() {
+        long currentTime = System.currentTimeMillis();
+        long elapsedSeconds = (currentTime - startTime) / 1000;
+        String timeString = String.format("Tiempo: %02d:%02d", elapsedSeconds / 60, elapsedSeconds % 60);
 
-            gamePanel.repaint();
-        });
-        gameLoopTimer.start();
-        // Botón de volver
-        JButton backButton = new JButton("Volver");
-        backButton.setBounds(50, 700, 100, 30);
-        backButton.addActionListener(e -> {
-            gameLoopTimer.stop();
-            gameFrame.dispose();
-            openUserPage();
-        });
-        gamePanel.add(backButton);
-
-        gameFrame.setContentPane(gamePanel);
-        gameFrame.setVisible(true);
+        Component[] components = gameFrame.getContentPane().getComponents();
+        for (Component comp : components) {
+            if (comp instanceof JPanel) {
+                JPanel sidePanel = (JPanel) comp;
+                Component[] sideComponents = sidePanel.getComponents();
+                for (Component sideComp : sideComponents) {
+                    if (sideComp instanceof JLabel && "timeLabel".equals(sideComp.getName())) {
+                        ((JLabel) sideComp).setText(timeString);
+                    }
+                }
+            }
+        }
     }
 
     private void checkCatCollision() {
@@ -834,16 +997,42 @@ public class Principal {
             showFullScreenImage();  // mostrar imagen del gato malo
             playSound();            // reproducir sonido
 
-            handleGameOver();
+            // Usar javax.swing.Timer correctamente
+            Timer delayTimer = new Timer(1000, e -> {
+                resetGame();
+                handleGameOver();
+                ((Timer)e.getSource()).stop(); // Detener el timer después de ejecutarse
+            });
+            delayTimer.setRepeats(false); // Para que solo se ejecute una vez
+            delayTimer.start(); // Iniciar el timer
         }
     }
+
+
 
     private void handleGameOver() {
         if (gameFrame != null) {
             gameFrame.dispose();
         }
-
         openUserPage();
+
+    }
+    private void resetGame() {
+        // Reiniciar posiciones
+        ballPosition = new Point(950, 100); // Posición inicial de la pelota
+        badBallPosition = new Point(600, 400); // Posición inicial del gato malo
+
+        // Reiniciar estado del juego
+        isBallMoving = false;
+        isDragging = false;
+        ballVelocityX = 0;
+        ballVelocityY = 0;
+        collisionHandled = false;
+        strokeCount = 0;
+        startTime = System.currentTimeMillis();
+
+        // Actualizar los rectángulos de colisión
+        ballRect.setLocation(ballPosition.x - BALL_RADIUS, ballPosition.y - BALL_RADIUS);
     }
 
     private void showFullScreenImage() {
@@ -932,7 +1121,9 @@ public class Principal {
         ballPosition.x += ballVelocityX;
         ballPosition.y += ballVelocityY;
         ballRect.setLocation(ballPosition.x - BALL_RADIUS, ballPosition.y - BALL_RADIUS);
-
+        updatebadCatPosition();
+        checkCatCollision();
+        checkHoleCollision();
         // Crear el rectángulo de la pelota
         Rectangle ballRect = new Rectangle(
                 ballPosition.x - BALL_RADIUS,
@@ -1002,21 +1193,43 @@ public class Principal {
 
     private void checkHoleCollision() {
         if (holeRect.intersects(ballRect)) {
-            long endTime = System.currentTimeMillis();
-            long durationSeconds = (endTime - startTime) / 1000;
+            try {
+                long endTime = System.currentTimeMillis();
+                long durationSeconds = (endTime - startTime) / 1000;
+                int points = calculateScore(strokeCount, durationSeconds);
 
-            // Calcular puntos
-            int points = calculateScore(strokeCount, durationSeconds);
+                // Get the User object (you'll need to implement this)
+                User user = getUserByName(username);
 
-            // Guardar en la base de datos
-            AuthService.saveScore(username, selectedClubType, strokeCount, durationSeconds, points);
+                // Use the instance method
+                scoreController.saveScore(user, selectedClubType, strokeCount, durationSeconds);
 
-            // Mostrar frame de resultados
-            showGameResults(username, selectedClubType, strokeCount, durationSeconds, points);
-
-            // Detener el juego
-            isBallMoving = false;
+                gameFrame.dispose();
+                openScoresPage();
+                showGameResults(username, selectedClubType, strokeCount, durationSeconds, points);
+                isBallMoving = false;
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error saving score: " + e.getMessage());
+            }
         }
+    }
+    private User getUserByName(String username) throws SQLException {
+        utils.DatabaseConnection dbConnection = new utils.DatabaseConnection();
+        try (Connection conn = dbConnection.getConnection()) {
+            String query = "SELECT id_user, name, password FROM users WHERE name = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, username);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    return new User(
+                            rs.getInt("id_user"),
+                            rs.getString("name"),
+                            rs.getString("password")
+                    );
+                }
+            }
+        }
+        throw new SQLException("User not found: " + username);
     }
     private int calculateScore(int strokes, long duration) {
         // Fórmula mejorada para calcular la puntuación
@@ -1120,7 +1333,7 @@ public class Principal {
 
     public static void main(String[] args) {
         try {
-            new Principal();
+            new Main();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error launching application: " + e.getMessage());
             e.printStackTrace();
