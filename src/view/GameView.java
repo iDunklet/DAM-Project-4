@@ -36,6 +36,9 @@ public class GameView {
     private long startTime;
     private ClubType selectedClubType;
     private String username;
+    private Timer gameTimer;
+    private ImageIcon flagGif;
+    private ImageIcon scaledFlagGif;
 
     // Game physics
     private List<Rectangle> obstacles = new ArrayList<>();
@@ -76,6 +79,11 @@ public class GameView {
     private void loadImages() {
         goodCat = new ImageIcon("resources/img/goodCat.jpg");
         badCat = new ImageIcon("resources/img/badCat.jpg");
+        flagGif = new ImageIcon("resources/gifs/flag.gif");
+        ImageIcon originalFlagGif = new ImageIcon("resources/gifs/flag.gif");
+        Image scaledFlag = originalFlagGif.getImage().getScaledInstance(
+                100, 150, Image.SCALE_DEFAULT); // Ajusta el tamaño (ancho, alto)
+        scaledFlagGif = new ImageIcon(scaledFlag);
     }
 
     private void initGame() {
@@ -214,7 +222,10 @@ public class GameView {
 
         // Hole
         g.setColor(Color.BLACK);
-        g.fillOval(1000, 650, 30, 30);
+        g.fillOval(1000, 650, 40, 40);
+        int flagX = holeRect.x ;
+        int flagY = holeRect.y - 100;
+        g.drawImage(scaledFlagGif.getImage(), flagX, flagY, null);
 
         // Obstacles
         g.setColor(Color.GRAY);
@@ -272,7 +283,7 @@ public class GameView {
         gamePanel.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (isDragging && !isBallMoving) {
+                if (isDragging) {
                     dragEnd = e.getPoint();
                     gamePanel.repaint();
                 }
@@ -296,7 +307,7 @@ public class GameView {
     }
 
     private void startGameLoop() {
-        Timer gameTimer = new Timer(16, e -> {
+        gameTimer = new Timer(16, e -> {
             updateBallPosition();
             updateTimer();
             gameFrame.getContentPane().repaint();
@@ -395,11 +406,12 @@ public class GameView {
             playSound();
 
             Timer delayTimer = new Timer(1000, e -> {
-                resetGame();
+                // Cierra el juego y vuelve al UserView
+                gameFrame.dispose();
                 try {
-                    handleGameOver();
+                    new UserView(username);
                 } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                    ex.printStackTrace();
                 }
                 ((Timer)e.getSource()).stop();
             });
@@ -410,6 +422,7 @@ public class GameView {
 
     private void checkHoleCollision() {
         if (holeRect.intersects(ballRect)) {
+            gameTimer.stop();
             try {
                 long endTime = System.currentTimeMillis();
                 long durationSeconds = (endTime - startTime) / 1000;
@@ -463,6 +476,7 @@ public class GameView {
         strokeCount = 0;
         startTime = System.currentTimeMillis();
         ballRect.setLocation(ballPosition.x - BALL_RADIUS, ballPosition.y - BALL_RADIUS);
+        gameFrame.getContentPane().repaint();
     }
 
     private void handleGameOver() throws IOException {
