@@ -91,12 +91,21 @@ public class ScoreController {
 
                 while (rs.next()) {
                     User user = new User(
-                            rs.getInt("id_user"),
+                            rs.getInt("ID_user"),
                             rs.getString("name"),
                             rs.getString("password")
                     );
 
-                    ClubType clubType = ClubType.valueOf(rs.getString("clubs_Types"));
+                    ClubType clubType;
+                    try {
+                        // Convertir a mayúsculas para asegurar coincidencia con el enum
+                        clubType = ClubType.valueOf(rs.getString("clubs_Types").toUpperCase());
+                    } catch (IllegalArgumentException e) {
+                        clubType = ClubType.DRIVER;
+                        System.err.println("Valor inválido en clubs_Types: " +
+                                rs.getString("clubs_Types") +
+                                ". Usando DRIVER como valor por defecto.");
+                    }
 
                     Score score = new Score(
                             rs.getInt("id_points"),

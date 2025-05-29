@@ -33,7 +33,7 @@ public class GameResultsView {
 
     private void createResultsFrame(String username, ClubType clubType, int strokes, long durationSeconds, int points) {
         resultsFrame = new JFrame("Resultados del Juego");
-        resultsFrame.setSize(800, 600);
+        resultsFrame.setSize(900, 600);
         resultsFrame.setLocationRelativeTo(null);
         resultsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -76,11 +76,11 @@ public class GameResultsView {
         buttonPanel.setBackground(darkBlue);
 
         JButton backButton = new JButton("Volver al Menú");
-        setupButton(backButton, 200, 50, orange, 16f);
+        setupButton(backButton, 400, 50, orange, 16f);
         addHoverEffect(backButton, orange, brightGreen);
 
         JButton scoresButton = new JButton("Ver Puntuaciones");
-        setupButton(scoresButton, 200, 50, brightGreen, 16f);
+        setupButton(scoresButton, 400, 50, brightGreen, 16f);
         addHoverEffect(scoresButton, brightGreen, orange);
 
         backButton.addActionListener(e -> {
