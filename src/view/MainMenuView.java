@@ -19,7 +19,6 @@ public class MainMenuView {
     private JButton loginButton;
     private JLabel logoLabel;
     private JButton exitButton;
-    private JLabel gato1Label;
 
     public MainMenuView() throws IOException, FontFormatException {
         loadFont();
@@ -36,7 +35,7 @@ public class MainMenuView {
         createLogoLabel();
         createLoginButton();
         createExitButton();
-        createCatLabel();
+        createCatLabels();
         showMainWindow();
     }
 
@@ -96,16 +95,27 @@ public class MainMenuView {
         panelMain.add(exitButton);
     }
 
-    private void createCatLabel() {
+    private void createCatLabels() {
         try {
-            ImageIcon icon = new ImageIcon("resources/gifs/gatoGif1.gif");
-            gato1Label = new JLabel(icon);
-            gato1Label.setSize(250, 250);
-            gato1Label.setLocation(100, panelMain.getHeight()/2);
-            panelMain.add(gato1Label);
+            // Left side cats (ajustados para que no se superpongan)
+            addCatGif("resources/gifs/gatoGif1.gif", 50, 100);
+            addCatGif("resources/gifs/gatoGif2.gif", 50, 500);
+
+            addCatGif("resources/gifs/gatoGif3.gif", 1150, 100);
+            addCatGif("resources/gifs/gatoGif4.gif", 1150, 500);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error loading cat animation: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error loading cat animations: " + e.getMessage());
         }
+    }
+
+    private void addCatGif(String path, int x, int y) {
+        ImageIcon gifIcon = new ImageIcon(path);
+
+        JLabel gifLabel = new JLabel(gifIcon);
+        gifLabel.setSize(gifIcon.getIconWidth(), gifIcon.getIconHeight()); // Usa el tamaño real del GIF
+        gifLabel.setLocation(x, y);
+        gifLabel.setOpaque(false);
+        panelMain.add(gifLabel);
     }
 
     private void setupButton(JButton button, int width, int height, Color color, float fontSize) {
@@ -118,11 +128,11 @@ public class MainMenuView {
     }
 
     private void addHoverEffect(JButton button, Color normal, Color hover) {
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+        button.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
                 button.setForeground(hover);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 button.setForeground(normal);
             }
         });
